@@ -19,14 +19,18 @@ This repository provides a complete setup guide and configuration files to deplo
 
 ## 📂 Repository Folder Structure ⚙️
 The Config_Files/ directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.Config_Files/
+
 ├── Hadoop_Config_Files/
 │   ├── core-site.xml         
 │   ├── hdfs-site.xml
 │   ├── mapred-site.xml
 │   └── yarn-site.xml
+
 └── Hive_Config_Files/
     └── hive-site.xml
-Example Configurations: You can review the pre-configured settings using the links below.core-site.xml (Hadoop)hive-site.xml (Hive)📌 Configuration DeploymentThese files must be copied into the respective configuration directories immediately after downloading and unzipping the Hadoop and Hive tar files.ComponentFiles to CopyDestination DirectoryHadoopAll files in Config_Files/Hadoop_Config_Files//usr/local/hadoop/etc/hadoop/Hivehive-site.xml from Config_Files/Hive_Config_Files//usr/local/hive/conf/
+sudo cp ~/your-repo/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
+sudo cp ~/your-repo/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
+    
 
 ---
 
