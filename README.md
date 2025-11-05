@@ -121,8 +121,15 @@ sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Co
 ```bash
 hdfs namenode -format
 ```
+### 4. Create NameNode and DataNode Directory
+```bash
+sudo mkdir -p /home/$USER/hadoop_data/hdfs/namenode
+sudo mkdir -p /home/$USER/hadoop_data/hdfs/datanode
+sudo chown -R $USER:$USER /home/$USER/hadoop_data
 
-### 4. Start Hadoop
+```
+
+### 5. Start Hadoop
 
 ```bash
 start-dfs.sh
