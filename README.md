@@ -35,8 +35,13 @@ Config_Files/
 Copy the configuration files:
 
 ```bash
-sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
-sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
+
+git clone https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop.git
+cd PowerBI_ODBC_Hive_Hadoop
+
+sudo cp ~/PowerBI_ODBC_Hive_Hadoop/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
+sudo cp ~/PowerBI_ODBC_Hive_Hadoop/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
+
 ```
 
 ---
