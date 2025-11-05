@@ -232,22 +232,26 @@ EXIT;
 ### 1. Install MySQL ODBC Driver
 
 ```bash
-sudo apt install unixodbc libmyodbc -y
+https://dev.mysql.com/downloads/connector/odbc/
 ```
 
 ### 2. Configure ODBC Files
 
-Configure the DSN (Data Source Name) in `/etc/odbc.ini` and the driver in `/etc/odbcinst.ini`.
+Configure the DSN (Data Source Name) in `Add` .
 
 **Example `/etc/odbc.ini` (for HiveServer2):**
 
 ```ini
-[HiveDSN]
-Driver=/usr/local/hive/lib/libhiveodbc.so  # Path to your Hive ODBC driver
-HOST=localhost
-PORT=10000
-Schema=default
-HiveServerType=2
+Open ODBC (64-bit)
+-> System DSN -> Add -> 
+Data Source Name = PowerBI_ODBC_Hive_Hadoop
+Host = Ip = Linux -> hostname -I
+Port = 10000
+Database = default
+Mechanism = User Name
+User Name = Linux Username
+Thrift Transport = SASL
+
 ```
 
 ### 3. Test Connection
@@ -255,17 +259,31 @@ HiveServerType=2
 You can test the ODBC connection using:
 
 ```bash
-isql -v HiveDSN hiveuser hivepassword
+click on Test
+
+you will see a message
+
+SUCCESS! 
+
+Successfully connected to data source!
+
+ODBC Version: 03.80
+Driver Version: 2.6.12.1012
+Bitness: 64-bit
+Locale: en_IN
 ```
 
 ---
 
 ## 📊 Power BI Connection
 
-1. Open **Power BI Desktop** (on your Windows machine).
-2. Go to **Get Data → ODBC**.
-3. Choose your configured DSN (e.g., `HiveDSN`).
-4. Authenticate and load your Hive tables for visualization.
+Open **Power BI Desktop** (on your Windows machine).
+Blank Document -> Home -> Get Data -> More -> Search for "ODBC"
+Select "ODBC" -> Connect -> PowerBI_ODBC_Hive_Hadoop -> Ok
+
+UserName = hiveuser
+Password = hivepassword
+
 
 ---
 
