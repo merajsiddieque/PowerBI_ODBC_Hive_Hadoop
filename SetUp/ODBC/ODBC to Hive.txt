@@ -1,0 +1,21 @@
+Open ODBC (64-bit)
+-> System DSN -> Add -> 
+Data Source Name = PowerBI_ODBC_Hive_Hadoop
+Host = Ip = Linux -> hostname -I
+Port = 10000
+Database = default
+Mechanism = User Name
+User Name = Linux Username
+Thrift Transport = SASL
+click Test
+
+you will see a message
+
+SUCCESS! 
+
+Successfully connected to data source!
+
+ODBC Version: 03.80
+Driver Version: 2.6.12.1012
+Bitness: 64-bit
+Locale: en_IN

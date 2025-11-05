@@ -1,0 +1,6 @@
+Open PowerBI
+Blank Document -> Home -> Get Data -> More -> Search for "ODBC"
+Select "ODBC" -> Connect -> PowerBI_ODBC_Hive_Hadoop -> Ok
+
+UserName = hiveuser
+Password = hivepassword
