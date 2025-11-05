@@ -17,7 +17,8 @@ This repository provides a complete setup guide and configuration files to deplo
 
 ---
 
-📂 Repository Folder Structure ⚙️The Config_Files/ directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.Config_Files/
+## 📂 Repository Folder Structure ⚙️
+The Config_Files/ directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.Config_Files/
 ├── Hadoop_Config_Files/
 │   ├── core-site.xml         
 │   ├── hdfs-site.xml
