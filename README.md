@@ -1,4 +1,4 @@
-🐘 Big Data Environment Setup: Hadoop + Hive + MySQL + ODBC + Power BI Integration
+## 🐘 Big Data Environment Setup: Hadoop + Hive + MySQL + ODBC + Power BI Integration
 
 This repository provides a complete setup guide and configuration files to deploy a working **Big Data environment** on **Ubuntu** (WSL or native). It includes **Hadoop**, **Hive**, **MySQL** (as Hive Metastore), and **ODBC** configuration for seamless **Power BI** connectivity.
 
