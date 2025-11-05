@@ -1,0 +1,273 @@
+# create directory for chat data
+hdfs dfs -mkdir -p /user/alam/whatsapp_chat
+
+# put file into HDFS
+hdfs dfs -put /home/alam/WhatsApp_Chat.txt /user/alam/whatsapp_chat/
+
+
+CREATE EXTERNAL TABLE whatsapp_chat_raw (
+  line STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION '/user/alam/whatsapp_chat/';
+
+
+CREATE TABLE whatsapp_chat_parsed AS
+SELECT
+  regexp_extract(line, '^(\\d{2}/\\d{2}/\\d{4})', 1) AS chat_date,
+  regexp_extract(line, '\\d{2}/\\d{2}/\\d{4}, (\\d{2}:\\d{2})', 1) AS chat_time,
+  regexp_extract(line, '- ([^:]+):', 1) AS sender,
+  regexp_extract(line, '- [^:]+: (.*)', 1) AS message
+FROM whatsapp_chat_raw
+WHERE line RLIKE '^\\d{2}/\\d{2}/\\d{4},';
+
+CREATE TABLE whatsapp_chat_parquet
+STORED AS PARQUET
+AS
+SELECT * FROM whatsapp_chat_parsed;
+
+
+
+-- ===========================================================
+--   WHATSAPP CHAT ANALYSIS TABLE CREATION SCRIPT (1–20)
+--   Base Table: whatsapp_chat_parquet
+--   Author: Siddique (with ChatGPT Assistant)
+-- ===========================================================
+
+-- Create database (optional)
+CREATE DATABASE IF NOT EXISTS whatsapp_analysis;
+USE whatsapp_analysis;
+
+-- ===========================================================
+--  #1 TOTAL MESSAGES
+-- ===========================================================
+CREATE TABLE whatsapp_total_messages AS
+SELECT COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet;
+
+-- ===========================================================
+--  #2 TOTAL WORDS
+-- ===========================================================
+CREATE TABLE whatsapp_total_words AS
+SELECT SUM(size(split(message, ' '))) AS total_words
+FROM whatsapp_chat_parquet;
+
+-- ===========================================================
+--  #3 MEDIA SHARED
+-- ===========================================================
+CREATE TABLE whatsapp_media_shared AS
+SELECT COUNT(*) AS total_media
+FROM whatsapp_chat_parquet
+WHERE message LIKE '<Media%';
+
+-- ===========================================================
+--  #4 LINKS SHARED
+-- ===========================================================
+CREATE TABLE whatsapp_links_shared AS
+SELECT COUNT(*) AS total_links
+FROM whatsapp_chat_parquet
+WHERE message RLIKE 'https?://';
+
+-- ===========================================================
+--  #5 MONTHLY STATS
+-- ===========================================================
+CREATE TABLE whatsapp_monthly_stats AS
+SELECT
+  date_format(from_unixtime(unix_timestamp(chat_date, 'dd/MM/yyyy')), 'yyyy-MM') AS month,
+  COUNT(*) AS messages
+FROM whatsapp_chat_parquet
+GROUP BY month
+ORDER BY month;
+
+-- ===========================================================
+--  #6 WEEKLY STATS
+-- ===========================================================
+CREATE TABLE whatsapp_weekly_stats AS
+SELECT
+  weekofyear(from_unixtime(unix_timestamp(chat_date, 'dd/MM/yyyy'))) AS week_number,
+  COUNT(*) AS messages
+FROM whatsapp_chat_parquet
+GROUP BY week_number
+ORDER BY week_number;
+
+-- ===========================================================
+--  #7 DAILY STATS
+-- ===========================================================
+CREATE TABLE whatsapp_daily_stats AS
+SELECT
+  chat_date,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY chat_date
+ORDER BY chat_date;
+
+-- ===========================================================
+--  #8 BUSY DAY
+-- ===========================================================
+CREATE TABLE whatsapp_busy_day AS
+SELECT chat_date, COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY chat_date
+ORDER BY total_messages DESC
+LIMIT 1;
+
+-- ===========================================================
+--  #9 BUSY HOUR
+-- ===========================================================
+CREATE TABLE whatsapp_busy_hour AS
+SELECT
+  chat_time,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY chat_time
+ORDER BY total_messages DESC
+LIMIT 1;
+
+-- ===========================================================
+--  #10 ACTIVITY HEATMAP
+-- ===========================================================
+CREATE TABLE whatsapp_activity_heatmap AS
+SELECT
+  dayofweek(from_unixtime(unix_timestamp(chat_date, 'dd/MM/yyyy'))) AS weekday,
+  hour(from_unixtime(unix_timestamp(chat_time, 'HH:mm'))) AS hour,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY weekday, hour
+ORDER BY weekday, hour;
+
+-- ===========================================================
+--  #11 USER DETAILS
+-- ===========================================================
+CREATE TABLE whatsapp_user_details AS
+SELECT
+  sender,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY sender
+ORDER BY total_messages DESC;
+
+-- ===========================================================
+--  #12 LINKS BY USER
+-- ===========================================================
+CREATE TABLE whatsapp_links_by_user AS
+SELECT
+  sender,
+  COUNT(*) AS total_links
+FROM whatsapp_chat_parquet
+WHERE message RLIKE 'https?://'
+GROUP BY sender
+ORDER BY total_links DESC;
+
+-- ===========================================================
+--  #13 LONGEST STREAK (ACTIVE DAYS)
+-- ===========================================================
+CREATE TABLE whatsapp_longest_streak AS
+SELECT sender, COUNT(DISTINCT chat_date) AS active_days
+FROM whatsapp_chat_parquet
+GROUP BY sender
+ORDER BY active_days DESC
+LIMIT 1;
+
+-- ===========================================================
+--  #14 LONGEST GAP BETWEEN MESSAGES
+-- ===========================================================
+CREATE TABLE whatsapp_longest_gap AS
+WITH ts AS (
+  SELECT
+    sender,
+    unix_timestamp(concat(chat_date, ' ', chat_time), 'dd/MM/yyyy HH:mm') AS ts
+  FROM whatsapp_chat_parquet
+),
+diffs AS (
+  SELECT
+    sender,
+    ts - LAG(ts) OVER (PARTITION BY sender ORDER BY ts) AS gap
+  FROM ts
+)
+SELECT sender, MAX(gap) AS longest_gap_seconds
+FROM diffs
+GROUP BY sender
+ORDER BY longest_gap_seconds DESC
+LIMIT 1;
+
+-- ===========================================================
+--  #15 RANK / CONTRIBUTION
+-- ===========================================================
+CREATE TABLE whatsapp_rank_contribution AS
+SELECT
+  sender,
+  COUNT(*) AS total_messages,
+  ROUND(100 * COUNT(*) / (SELECT COUNT(*) FROM whatsapp_chat_parquet), 2) AS contribution_percent
+FROM whatsapp_chat_parquet
+GROUP BY sender
+ORDER BY total_messages DESC;
+
+-- ===========================================================
+--  #16 RANK TABLE (POSITION BASED)
+-- ===========================================================
+CREATE TABLE whatsapp_rank_table AS
+SELECT
+  sender,
+  RANK() OVER (ORDER BY COUNT(*) DESC) AS rank,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY sender;
+
+-- ===========================================================
+--  #17 PEAK HOUR
+-- ===========================================================
+CREATE TABLE whatsapp_peak_hour AS
+SELECT
+  hour(from_unixtime(unix_timestamp(chat_time, 'HH:mm'))) AS hour,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY hour
+ORDER BY total_messages DESC
+LIMIT 1;
+
+-- ===========================================================
+--  #18 REPLY SPEED (AVG TIME GAP)
+-- ===========================================================
+CREATE TABLE whatsapp_reply_speed AS
+WITH t AS (
+  SELECT
+    sender,
+    unix_timestamp(concat(chat_date, ' ', chat_time), 'dd/MM/yyyy HH:mm') AS ts
+  FROM whatsapp_chat_parquet
+),
+diff AS (
+  SELECT
+    sender,
+    ts - LAG(ts) OVER (ORDER BY ts) AS reply_gap
+  FROM t
+)
+SELECT
+  AVG(reply_gap) AS avg_reply_seconds
+FROM diff
+WHERE reply_gap IS NOT NULL;
+
+-- ===========================================================
+--  #19 EMOJI STATS
+-- ===========================================================
+CREATE TABLE whatsapp_emoji_stats AS
+SELECT
+  sender,
+  COUNT(*) AS emoji_messages
+FROM whatsapp_chat_parquet
+WHERE message RLIKE '[\u1F600-\u1F64F]'
+GROUP BY sender
+ORDER BY emoji_messages DESC;
+
+-- ===========================================================
+--  #20 MOST UNEMPLOYED (BUSIEST USER)
+-- ===========================================================
+CREATE TABLE whatsapp_most_unemployed AS
+SELECT
+  sender,
+  COUNT(*) AS total_messages
+FROM whatsapp_chat_parquet
+GROUP BY sender
+ORDER BY total_messages DESC
+LIMIT 1;

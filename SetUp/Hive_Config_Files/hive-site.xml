@@ -1,0 +1,66 @@
+<configuration>
+
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>/user/hive/warehouse</value>
+    <description>Location of the default database for the warehouse</description>
+  </property>
+
+  <property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <value>jdbc:mysql://localhost/hive_metastore?createDatabaseIfNotExist=true</value>
+  <description>JDBC connect string for a JDBC metastore</description>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>com.mysql.cj.jdbc.Driver</value>
+    <description>Driver class name for a JDBC metastore</description>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>hiveuser</value>
+    <description>Username to use against metastore database</description>
+  </property>
+
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>hivepassword</value>
+    <description>Password to use against metastore database</description>
+  </property>
+
+  <property>
+    <name>hive.metastore.schema.verification</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>datanucleus.schema.autoCreateAll</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>datanucleus.fixedDatastore</name>
+    <value>true</value>
+  </property>
+	<property>
+  <name>hive.server2.thrift.bind.host</name>
+  <value>0.0.0.0</value>
+</property>
+
+<property>
+  <name>hive.server2.thrift.port</name>
+  <value>10000</value>
+</property>
+
+<property>
+  <name>hadoop.security.token.service.use.ip</name>
+  <value>true</value>
+</property>
+
+<property>
+  <name>hive.server2.thrift.max.worker.threads</name>
+  <value>500</value>
+</property>
+
+</configuration>
