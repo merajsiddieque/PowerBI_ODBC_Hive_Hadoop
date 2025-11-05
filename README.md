@@ -172,6 +172,15 @@ start-yarn.sh
 
 ---
 
+### 6. UI View
+
+```bash
+NameNode -> http://localhost:9870/
+FileSystem -> http://localhost:9870/explorer.html#/
+```
+
+---
+
 ## 🐝 Hive Setup
 
 ### 1. Download and Extract
