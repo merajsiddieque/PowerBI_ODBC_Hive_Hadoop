@@ -54,7 +54,36 @@ Run the following command to install necessary packages:
 
 ```bash
 sudo apt update
-sudo apt install openjdk-11-jdk wget tar ssh rsync mysql-server unixodbc libmyodbc -y
+sudo apt install openjdk-11-jdk
+```
+
+---
+
+### 2. Install ssh-server
+
+Run the following command :
+
+```bash
+# Install SSH server and client
+sudo apt install openssh-server openssh-client -y
+
+# Start and enable the SSH service
+sudo systemctl enable ssh
+sudo systemctl start ssh
+
+# Generate an SSH key pair (press Enter for all prompts)
+ssh-keygen -t rsa -P ""
+
+# Add your public key to authorized_keys for passwordless SSH
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+# Set correct permissions
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+# Test SSH connection
+ssh localhost
+
 ```
 
 ---
