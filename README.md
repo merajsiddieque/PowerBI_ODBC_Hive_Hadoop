@@ -19,7 +19,7 @@ This repository provides a complete setup guide and configuration files to deplo
 
 ## 📂 Repository Folder Structure ⚙️
 
-The `https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files` directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.
+The `https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/SetUp/` directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.
 
 ```
 Config_Files/
@@ -39,8 +39,8 @@ Copy the configuration files:
 git clone https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop.git
 cd PowerBI_ODBC_Hive_Hadoop
 
-sudo cp ~/PowerBI_ODBC_Hive_Hadoop/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
-sudo cp ~/PowerBI_ODBC_Hive_Hadoop/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
+sudo cp ~SetUp/Hadoop/Single Node Cluster/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
+sudo cp ~SetUp/Hive/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
 
 ```
 
