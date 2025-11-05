@@ -19,7 +19,7 @@ This repository provides a complete setup guide and configuration files to deplo
 
 ## 📂 Repository Folder Structure ⚙️
 
-The `Config_Files/` directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.
+The `https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files` directory holds all the essential pre-configured XML files for this single-node Hadoop and Hive setup.
 
 ```
 Config_Files/
@@ -35,8 +35,8 @@ Config_Files/
 Copy the configuration files:
 
 ```bash
-sudo cp ~/your-repo/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
-sudo cp ~/your-repo/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
+sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
+sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
 ```
 
 ---
@@ -111,7 +111,7 @@ sudo mv hadoop-3.3.6 hadoop
 ### 2. Copy Configuration Files
 
 ```bash
-sudo cp ~/your-repo/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
+sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files/Hadoop_Config_Files/*.xml /usr/local/hadoop/etc/hadoop/
 ```
 
 ### 3. Format NameNode
@@ -145,7 +145,7 @@ sudo mv apache-hive-4.0.1-bin hive
 ### 2. Configure Hive
 
 ```bash
-sudo cp ~/your-repo/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
+sudo cp ~https://github.com/merajsiddieque/PowerBI_ODBC_Hive_Hadoop/tree/main/Config_Files/Hive_Config_Files/hive-site.xml /usr/local/hive/conf/
 ```
 
 ### 3. Set Hadoop Path in `hive-env.sh`
