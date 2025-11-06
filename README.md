@@ -325,3 +325,4 @@ This repository is licensed under the **Apache 2.0 License**. Feel free to fork 
 
 **Meraj Alam**
 GitHub: [@merajsiddieque](https://github.com/merajsiddieque)
+LinkedIn: [@merajsiddieque](https://www.linkedin.com/posts/merajsiddieque_doaisvnit-bigdata-hadoop-activity-7391905716292300800-PsHS?utm_source=share&utm_medium=member_android&rcm=ACoAAEZ0dNgBSQk80YWmp2SSrtDTZVoDdM8gf1E)
